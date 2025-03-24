@@ -1,11 +1,11 @@
 import React from "react";
-import MainLayout from "../layout/MainLayout";
-import Dashboard from "../components/Dashboard";
+import { Outlet } from "react-router-dom";
+import MainLayout from "../../layout/MainLayout";
 
 const DashboardPage = () => {
   return (
     <MainLayout>
-      <Dashboard />
+      <Outlet /> 
     </MainLayout>
   );
 };
