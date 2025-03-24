@@ -1,45 +1,66 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { addTeacher, deleteTeacher } from "../redux/slices/teacherSlice";
 import DataTable from "react-data-table-component";
 
-const columns = [
+const columns = (handleDelete) => [
   { name: "ID", selector: (row) => row.id, sortable: true },
   { name: "Name", selector: (row) => row.name, sortable: true },
   { name: "Subject", selector: (row) => row.subject, sortable: true },
   { name: "Email", selector: (row) => row.email },
-];
-
-const data = [
   {
-    id: 1,
-    name: "Mr. Anderson",
-    subject: "Math",
-    email: "anderson@example.com",
+    name: "Actions",
+    cell: (row) => (
+      <button
+        onClick={() => handleDelete(row.id)}
+        className="px-3 py-1 bg-red-500 text-white rounded-md cursor-pointer"
+      >
+        Delete
+      </button>
+    ),
   },
-  {
-    id: 2,
-    name: "Ms. Johnson",
-    subject: "English",
-    email: "johnson@example.com",
-  },
-  { id: 3, name: "Dr. Brown", subject: "Science", email: "brown@example.com" },
-  { id: 4, name: "Mrs. Davis", subject: "History", email: "davis@example.com" },
 ];
 
 const TeacherTable = () => {
-  const [search, setSearch] = useState("");
-  const [filteredData, setFilteredData] = useState(data);
+  const teachers = useSelector((state) => state.teachers.teachers);
+  const dispatch = useDispatch();
 
-  // Handle search input change
+  const [search, setSearch] = useState("");
+  const [filteredData, setFilteredData] = useState(teachers);
+  const [newTeacher, setNewTeacher] = useState({
+    name: "",
+    subject: "",
+    email: "",
+  });
+
+  useEffect(() => {
+    setFilteredData(teachers);
+  }, [teachers]);
+
   const handleSearch = (event) => {
     const query = event.target.value.toLowerCase();
     setSearch(query);
     setFilteredData(
-      data.filter(
+      teachers.filter(
         (teacher) =>
           teacher.name.toLowerCase().includes(query) ||
           teacher.subject.toLowerCase().includes(query)
       )
     );
+  };
+
+  // Add Teacher
+  const handleAddTeacher = () => {
+    if (!newTeacher.name || !newTeacher.subject || !newTeacher.email) return;
+
+    const newEntry = { id: teachers.length + 1, ...newTeacher };
+    dispatch(addTeacher(newEntry));
+    setNewTeacher({ name: "", subject: "", email: "" });
+  };
+
+  // Delete Teacher
+  const handleDelete = (id) => {
+    dispatch(deleteTeacher(id));
   };
 
   return (
@@ -54,12 +75,47 @@ const TeacherTable = () => {
         className="w-full p-2 mb-4 border border-gray-300 rounded-md"
       />
 
+      <div className="mb-4 flex gap-2">
+        <input
+          type="text"
+          placeholder="Name"
+          value={newTeacher.name}
+          onChange={(e) =>
+            setNewTeacher({ ...newTeacher, name: e.target.value })
+          }
+          className="border p-2 rounded w-1/3"
+        />
+        <input
+          type="text"
+          placeholder="Subject"
+          value={newTeacher.subject}
+          onChange={(e) =>
+            setNewTeacher({ ...newTeacher, subject: e.target.value })
+          }
+          className="border p-2 rounded w-1/3"
+        />
+        <input
+          type="email"
+          placeholder="Email"
+          value={newTeacher.email}
+          onChange={(e) =>
+            setNewTeacher({ ...newTeacher, email: e.target.value })
+          }
+          className="border p-2 rounded w-1/3"
+        />
+        <button
+          onClick={handleAddTeacher}
+          className="px-4 py-2 bg-blue-500 text-white rounded-md cursor-pointer"
+        >
+          Add
+        </button>
+      </div>
+
       <DataTable
-        columns={columns}
+        columns={columns(handleDelete)}
         data={filteredData}
         pagination
         highlightOnHover
-        className="border"
       />
     </div>
   );
