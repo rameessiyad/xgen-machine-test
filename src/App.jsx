@@ -1,9 +1,12 @@
-import React from 'react'
+import React from "react";
+import Routing from "./routing/routing";
 
 const App = () => {
   return (
-    <div className='bg-blue-500'>App</div>
-  )
-}
+    <>
+      <Routing />
+    </>
+  );
+};
 
-export default App
+export default App;
