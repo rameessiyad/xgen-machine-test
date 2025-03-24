@@ -1,11 +1,17 @@
 import React from "react";
+import { useDispatch } from "react-redux";
+import { login } from "../redux/slices/authSlice";
+import { useNavigate } from "react-router-dom";
 import LoginForm from "../components/LoginForm";
 
 const LoginPage = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
   const handleLogin = (credentials) => {
     if (credentials.username === "admin" && credentials.password === "admin") {
-      alert("Login Successful!");
-      window.location.href = "/dashboard"; // Temporary redirection, Redux will replace this
+      dispatch(login()); 
+      navigate("/dashboard");
     } else {
       alert("Invalid Credentials");
     }

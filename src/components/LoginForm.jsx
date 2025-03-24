@@ -21,21 +21,19 @@ const LoginForm = ({ onLogin }) => {
         CRES Login
       </h2>
       <form onSubmit={handleSubmit}>
-        {/* Username Field */}
         <div className="mb-4">
           <label className="block text-gray-600 text-sm mb-1">Username</label>
           <input
             type="text"
             name="username"
             className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
-            placeholder="Enter admin"
+            placeholder="Enter username"
             value={credentials.username}
             onChange={handleChange}
             required
           />
         </div>
 
-        {/* Password Field */}
         <div className="mb-4">
           <label className="block text-gray-600 text-sm mb-1">Password</label>
           <input
@@ -49,7 +47,6 @@ const LoginForm = ({ onLogin }) => {
           />
         </div>
 
-        {/* Login Button */}
         <button
           type="submit"
           className="w-full bg-violet-600 text-white p-2 rounded-md hover:bg-violet-700 transition duration-300"

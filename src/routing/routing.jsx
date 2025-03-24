@@ -2,10 +2,10 @@ import React from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import DashboardPage from "../pages/DashboardPage";
 import LoginPage from "../pages/LoginPage";
-
-const isAuthenticated = false;
+import { useSelector } from "react-redux";
 
 const PrivateRoute = ({ children }) => {
+  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
   return isAuthenticated ? children : <Navigate to="/" />;
 };
 
